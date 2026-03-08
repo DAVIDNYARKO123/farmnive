@@ -608,6 +608,21 @@ blockquote {
     font-size: 0.9rem;
 }
 
+.footer-email {
+    margin-top: 0.5rem;
+}
+
+.footer-email a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: var(--transition);
+    font-size: 0.9rem;
+}
+
+.footer-email a:hover {
+    color: var(--white);
+}
+
 .footer-links {
     display: flex;
     gap: 2rem;
