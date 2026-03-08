@@ -1,0 +1,36 @@
+# GitHub Pages Configuration for FarmNive
+
+# Site settings
+title: FarmNive
+description: AI-Powered Modular Hydroponic Farming System for Sustainable Agriculture
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "" # the base hostname & protocol for your site
+
+# Build settings
+markdown: kramdown
+theme: null
+
+# Exclude files from processing
+exclude:
+  - README.md
+  - .gitignore
+  - node_modules/
+  - vendor/
+
+# Include files
+include:
+  - _pages
+
+# Plugins
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# SEO settings
+author: FarmNive Team
+social:
+  name: FarmNive
+  links: []
+
+# GitHub Pages specific settings
+github: [metadata]
