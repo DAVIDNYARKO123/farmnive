@@ -167,6 +167,115 @@ if (hero) {
     }, { passive: true });
 }
 
+// Water ripple effect on hero section
+class WaterRipple {
+    constructor(canvas) {
+        this.canvas = canvas;
+        this.ctx = canvas.getContext('2d');
+        this.width = canvas.width = canvas.offsetWidth;
+        this.height = canvas.height = canvas.offsetHeight;
+        this.ripples = [];
+        this.maxRipples = 3;
+
+        this.setupCanvas();
+        this.animate();
+        this.addEventListeners();
+    }
+
+    setupCanvas() {
+        this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+        this.ctx.lineWidth = 2;
+    }
+
+    addEventListeners() {
+        let lastX = null;
+        let lastY = null;
+        let frameId = null;
+
+        this.canvas.addEventListener('mousemove', (e) => {
+            const rect = this.canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            // Check if mouse has moved enough to create new ripple
+            if (lastX === null || lastY === null ||
+                Math.abs(x - lastX) > 20 || Math.abs(y - lastY) > 20) {
+
+                if (frameId) {
+                    cancelAnimationFrame(frameId);
+                }
+
+                frameId = requestAnimationFrame(() => {
+                    this.addRipple(x, y, 0.7);
+                    lastX = x;
+                    lastY = y;
+                });
+            }
+        });
+
+        this.canvas.addEventListener('click', (e) => {
+            const rect = this.canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            this.addRipple(x, y, 1.5);
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            this.width = this.canvas.width = this.canvas.offsetWidth;
+            this.height = this.canvas.height = this.canvas.offsetHeight;
+        });
+    }
+
+    addRipple(x, y, sizeMultiplier = 1) {
+        this.ripples.push({
+            x,
+            y,
+            radius: 0,
+            maxRadius: 150 * sizeMultiplier,
+            speed: 2,
+            opacity: 1,
+            decay: 0.015
+        });
+    }
+
+    animate() {
+        this.ctx.clearRect(0, 0, this.width, this.height);
+
+        // Update and draw ripples
+        this.ripples = this.ripples.filter(ripple => {
+            ripple.radius += ripple.speed;
+            ripple.opacity -= ripple.decay;
+
+            if (ripple.opacity > 0 && ripple.radius < ripple.maxRadius) {
+                this.ctx.beginPath();
+                this.ctx.arc(ripple.x, ripple.y, ripple.radius, 0, Math.PI * 2);
+                this.ctx.strokeStyle = `rgba(255, 255, 255, ${ripple.opacity * 0.3})`;
+                this.ctx.stroke();
+
+                // Inner ripple for depth
+                this.ctx.beginPath();
+                this.ctx.arc(ripple.x, ripple.y, ripple.radius * 0.7, 0, Math.PI * 2);
+                this.ctx.strokeStyle = `rgba(255, 255, 255, ${ripple.opacity * 0.15})`;
+                this.ctx.stroke();
+
+                return true;
+            }
+            return false;
+        });
+
+        requestAnimationFrame(() => this.animate());
+    }
+}
+
+// Initialize water ripple effect for hero section
+if (hero && window.innerWidth > 768) {
+    const rippleCanvas = document.createElement('canvas');
+    rippleCanvas.className = 'ripple-canvas';
+    hero.appendChild(rippleCanvas);
+    new WaterRipple(rippleCanvas);
+}
+
 // Staggered animation for cards
 const animateCards = () => {
     const cardSections = {

@@ -122,6 +122,7 @@ body.loaded {
     align-items: center;
     position: relative;
     background-attachment: fixed;
+    overflow: hidden;
 }
 
 .hero::before {
@@ -135,14 +136,30 @@ body.loaded {
     z-index: 1;
 }
 
+.ripple-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: auto;
+    cursor: pointer;
+}
+
 .hero-content {
     text-align: center;
     max-width: 900px;
     margin: 0 auto;
     position: relative;
-    z-index: 2;
+    z-index: 3;
     opacity: 0;
     animation: heroFadeIn 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
+    pointer-events: none;
+}
+
+.hero-content .btn {
+    pointer-events: auto;
 }
 
 .badge {
