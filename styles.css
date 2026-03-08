@@ -115,31 +115,52 @@ body.loaded {
 /* Hero Section */
 .hero {
     padding: 160px 0 100px;
-    background: var(--white);
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.5)),
+                url('https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat;
     min-height: 100vh;
     display: flex;
     align-items: center;
     position: relative;
+    background-attachment: fixed;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.6) 100%);
+    z-index: 1;
 }
 
 .hero-content {
     text-align: center;
     max-width: 900px;
     margin: 0 auto;
+    position: relative;
+    z-index: 2;
+    opacity: 0;
+    animation: heroFadeIn 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
 }
 
 .badge {
     display: inline-block;
-    background: var(--text-dark);
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     color: var(--white);
-    padding: 0.4rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 1.2rem;
     border-radius: 4px;
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.5px;
     text-transform: uppercase;
     margin-bottom: 2rem;
-    animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+    animation: fadeInUp 1s cubic-bezier(0.4, 0, 0.2, 1) 0.5s forwards;
 }
 
 .hero-title {
@@ -148,31 +169,35 @@ body.loaded {
     margin-bottom: 1.5rem;
     line-height: 1.1;
     letter-spacing: -1.5px;
-    color: var(--text-dark);
-    animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.1s both;
+    color: var(--white);
+    opacity: 0;
+    animation: fadeInUp 1s cubic-bezier(0.4, 0, 0.2, 1) 0.7s forwards;
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
 }
 
 .gradient-text {
-    color: var(--text-dark);
+    color: var(--white);
 }
 
 .hero-subtitle {
     font-size: 1.15rem;
-    color: var(--text-light);
+    color: rgba(255, 255, 255, 0.9);
     margin-bottom: 2.5rem;
     max-width: 650px;
     margin-left: auto;
     margin-right: auto;
     font-weight: 400;
     line-height: 1.6;
-    animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
+    opacity: 0;
+    animation: fadeInUp 1s cubic-bezier(0.4, 0, 0.2, 1) 0.9s forwards;
 }
 
 .hero-buttons {
     display: flex;
     gap: 1rem;
     justify-content: center;
-    animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s both;
+    opacity: 0;
+    animation: fadeInUp 1s cubic-bezier(0.4, 0, 0.2, 1) 1.1s forwards;
 }
 
 .btn {
@@ -188,25 +213,26 @@ body.loaded {
 }
 
 .btn-primary {
-    background: var(--text-dark);
-    color: var(--white);
+    background: var(--white);
+    color: var(--text-dark);
 }
 
 .btn-primary:hover {
-    background: var(--primary-dark);
-    transform: translateY(-1px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    background: rgba(255, 255, 255, 0.9);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
 }
 
 .btn-secondary {
     background: transparent;
-    color: var(--text-dark);
-    border: 2px solid var(--text-dark);
+    color: var(--white);
+    border: 2px solid var(--white);
 }
 
 .btn-secondary:hover {
-    background: var(--text-dark);
-    color: var(--white);
+    background: var(--white);
+    color: var(--text-dark);
+    transform: translateY(-2px);
 }
 
 /* Achievement Section */
@@ -335,7 +361,12 @@ blockquote {
 .tech-icon {
     font-size: 2.5rem;
     margin-bottom: 1.5rem;
-    opacity: 0.9;
+    color: var(--text-dark);
+    opacity: 0.85;
+}
+
+.tech-icon i {
+    display: block;
 }
 
 .tech-card h3 {
@@ -461,6 +492,14 @@ blockquote {
     color: var(--text-dark);
     font-weight: 600;
     letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.vision-item h3 i {
+    font-size: 1.35rem;
+    opacity: 0.85;
 }
 
 .vision-item ul {
@@ -468,18 +507,24 @@ blockquote {
 }
 
 .vision-item li {
-    padding: 0.9rem 0;
+    padding: 0.9rem 0 0.9rem 1.5rem;
     color: var(--text-light);
     font-size: 0.95rem;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     line-height: 1.5;
+    position: relative;
 }
 
 .vision-item li:before {
-    content: "• ";
-    color: var(--text-dark);
-    font-weight: bold;
-    margin-right: 0.75rem;
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 4px;
+    background: var(--text-dark);
+    border-radius: 50%;
 }
 
 .vision-item li:last-child {
@@ -573,11 +618,22 @@ blockquote {
 @keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(30px);
     }
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+@keyframes heroFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
     }
 }
 
@@ -626,12 +682,18 @@ blockquote {
         left: 0;
     }
 
+    .hero {
+        background-attachment: scroll;
+        padding: 140px 0 80px;
+    }
+
     .hero-title {
         font-size: 2.5rem;
+        letter-spacing: -1px;
     }
 
     .hero-subtitle {
-        font-size: 1.1rem;
+        font-size: 1rem;
     }
 
     .hero-buttons {
@@ -677,8 +739,22 @@ blockquote {
 }
 
 @media (max-width: 480px) {
+    .hero {
+        padding: 120px 0 60px;
+    }
+
     .hero-title {
-        font-size: 2rem;
+        font-size: 1.75rem;
+        letter-spacing: -0.5px;
+    }
+
+    .hero-subtitle {
+        font-size: 0.95rem;
+    }
+
+    .badge {
+        font-size: 0.7rem;
+        padding: 0.4rem 0.9rem;
     }
 
     .achievement-item h3 {

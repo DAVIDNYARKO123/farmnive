@@ -74,16 +74,16 @@ sections.forEach(section => {
 });
 
 // Counter animation for achievement numbers
-function animateCounter(element, target, duration = 2000) {
+function animateCounter(element, target, suffix = '', prefix = '', duration = 2000) {
     let current = 0;
     const increment = target / (duration / 16);
     const timer = setInterval(() => {
         current += increment;
         if (current >= target) {
-            element.textContent = target;
+            element.textContent = prefix + target + suffix;
             clearInterval(timer);
         } else {
-            element.textContent = Math.floor(current);
+            element.textContent = prefix + Math.floor(current) + suffix;
         }
     }, 16);
 }
@@ -94,17 +94,29 @@ const achievementObserver = new IntersectionObserver((entries) => {
         if (entry.isIntersecting) {
             const counters = entry.target.querySelectorAll('.achievement-item h3');
             counters.forEach(counter => {
-                const text = counter.textContent;
-                const match = text.match(/\d+/);
-                if (match) {
-                    const number = parseInt(match[0]);
-                    counter.textContent = '0';
+                const text = counter.textContent.trim();
+
+                // Check for $100K format
+                if (text.includes('$') && text.includes('K')) {
+                    const number = parseInt(text.replace(/\D/g, ''));
+                    counter.textContent = '$0K';
                     setTimeout(() => {
-                        animateCounter(counter, number);
-                        setTimeout(() => {
-                            counter.textContent = text;
-                        }, 2000);
+                        animateCounter(counter, number, 'K', '$');
                     }, 200);
+                }
+                // Check for other numbers
+                else {
+                    const match = text.match(/\d+/);
+                    if (match) {
+                        const number = parseInt(match[0]);
+                        counter.textContent = '0';
+                        setTimeout(() => {
+                            animateCounter(counter, number);
+                            setTimeout(() => {
+                                counter.textContent = text;
+                            }, 2000);
+                        }, 200);
+                    }
                 }
             });
             achievementObserver.unobserve(entry.target);
@@ -135,7 +147,7 @@ window.addEventListener('scroll', () => {
     });
 }, { passive: true });
 
-// Subtle parallax effect for hero section - Tesla style
+// Subtle parallax effect for hero background - Tesla style
 const hero = document.querySelector('.hero');
 if (hero) {
     let ticking = false;
@@ -143,8 +155,11 @@ if (hero) {
         if (!ticking) {
             window.requestAnimationFrame(() => {
                 const scrolled = window.pageYOffset;
-                const parallaxSpeed = 0.3;
-                hero.style.transform = `translateY(${scrolled * parallaxSpeed}px)`;
+                const parallaxSpeed = 0.5;
+                // Only apply parallax on desktop
+                if (window.innerWidth > 768) {
+                    hero.style.backgroundPositionY = `${scrolled * parallaxSpeed}px`;
+                }
                 ticking = false;
             });
             ticking = true;
